@@ -25,9 +25,9 @@ export class Stack<T = unknown> implements IStack<T> {
   }
 
   pop() {
-    if(this.isEmpty()) {
-      throw new Error('underflow')
+    if (this.isEmpty()) {
+      throw new Error('underflow');
     }
-    return this.value[--this.size]
+    return this.value[--this.size];
   }
 }
