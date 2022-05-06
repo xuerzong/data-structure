@@ -1,33 +1,33 @@
 interface IStack<T> {
-  size: number;
-
-  isEmpty: () => boolean;
-
   push: (value: T) => void;
 
   pop: () => T;
+
+  len: () => number;
 }
 
-export class Stack<T = unknown> implements IStack<T> {
+export default class Stack<T = unknown> implements IStack<T> {
   private readonly value: T[];
-  size: number;
+  top: T | undefined;
   constructor() {
     this.value = [] as T[];
-    this.size = 0;
   }
 
-  isEmpty() {
-    return this.size === 0;
+  len() {
+    return this.value.length;
   }
 
   push(value: T) {
-    this.value[this.size++] = value;
+    this.top = value;
+    this.value.push(value);
   }
 
   pop() {
-    if (this.isEmpty()) {
+    if (this.len() === 0) {
       throw new Error('underflow');
     }
-    return this.value[--this.size];
+    const topRes = this.value.pop() as T;
+    this.top = this.value[this.value.length - 1];
+    return topRes;
   }
 }
