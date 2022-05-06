@@ -1,40 +1,68 @@
-import { Stack } from '.';
+import { isFunction, isUndefined } from '@/_utils/is';
+import Stack from '.';
 
 describe('Stack', () => {
   describe('init', () => {
     const stack = new Stack();
-    it('size: should be 0', () => {
-      console.log(3);
-      expect(stack.size).toBe(0);
+    it('len: should be 0', () => {
+      expect(stack.len()).toBe(0);
     });
-    it('isEmpty: should return true', () => {
-      expect(stack.isEmpty()).toBe(true);
+
+    it('top: should be undefined', () => {
+      expect(isUndefined(stack.top)).toBe(true);
+    });
+
+    it('should have function called len', () => {
+      expect(isFunction(stack.len)).toBe(true);
+    });
+
+    it('should have function called push', () => {
+      expect(isFunction(stack.push)).toBe(true);
+    });
+
+    it('should have function called pop', () => {
+      expect(isFunction(stack.pop)).toBe(true);
+    });
+
+    it('len: should return 0', () => {
+      expect(stack.len()).toBe(0);
     });
   });
 
   describe('push', () => {
     const stack = new Stack();
+    stack.push(0);
     stack.push(1);
-    it('size: should be increased', () => {
-      expect(stack.size).toBe(1);
+
+    it('top: should be the last value', () => {
+      expect(stack.top).toBe(1);
     });
-    it('isEmpty: should return false', () => {
-      expect(stack.isEmpty()).toBe(false);
+
+    it('len: should return stack.length', () => {
+      expect(stack.len()).toBe(2);
     });
   });
 
   describe('pop', () => {
     const stack = new Stack();
+    stack.push(0);
     stack.push(1);
-    stack.pop();
-    it('size: should be reduced', () => {
-      expect(stack.size).toBe(0);
+    const popValue = stack.pop();
+
+    it('popValue: should be the top value', () => {
+      expect(popValue).toBe(1);
     });
-    it('isEmpty: should return true', () => {
-      expect(stack.isEmpty()).toBe(true);
+
+    it('top: should be the last value', () => {
+      expect(stack.top).toBe(0);
+    });
+
+    it('len: should return stack.length', () => {
+      expect(stack.len()).toBe(1);
     });
 
     it('should throw error when stack is empty', () => {
+      stack.pop();
       expect(() => stack.pop()).toThrow(Error);
       expect(() => stack.pop()).toThrow('underflow');
     });
