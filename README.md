@@ -12,7 +12,7 @@ yarn add -D @xuerzong/data-structure
 
 - [x] Queue
 - [x] Stack
-- [ ] LinkedList
+- [x] LinkedList
 - [ ] Tree
 - ...
 
