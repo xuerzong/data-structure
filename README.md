@@ -10,7 +10,7 @@ yarn add -D @xuerzong/data-structure
 
 ## To do list
 
-- [ ] Queue
+- [x] Queue
 - [x] Stack
 - [ ] LinkedList
 - [ ] Tree
