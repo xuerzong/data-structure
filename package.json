@@ -1,11 +1,24 @@
 {
   "name": "@xuerzong/data-structure",
   "version": "0.0.3",
-  "repository": "git@github.com:xuerzong/data-structure.git",
   "author": "xuerzong <xuerzong@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/xuerzong/data-structure",
+  "description": "Data structures implemented by typescript.",
+  "keywords": [
+    "data-structure",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuerzong/data-structure"
+  },
+  "bugs": {
+    "url": "https://github.com/xuerzong/data-structure/issues"
+  },
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "test": "jest",
