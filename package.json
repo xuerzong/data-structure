@@ -1,13 +1,26 @@
 {
   "name": "@xuerzong/data-structure",
   "version": "0.0.3",
-  "repository": "git@github.com:xuerzong/data-structure.git",
   "author": "xuerzong <xuerzong@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/xuerzong/data-structure",
+  "description": "Data structures implemented by typescript.",
+  "keywords": [
+    "data-structure",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuerzong/data-structure"
+  },
+  "bugs": {
+    "url": "https://github.com/xuerzong/data-structure/issues"
+  },
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig-build.json",
+    "build": "rimraf dist && rollup -c",
     "test": "jest",
     "format": "prettier --write src/**/*.ts",
     "prepare": "husky install"
@@ -23,6 +36,9 @@
     "jest": "^28.0.3",
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.73.0",
+    "rollup-plugin-typescript2": "^0.31.2",
     "ts-jest": "^28.0.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
