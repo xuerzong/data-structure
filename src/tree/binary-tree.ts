@@ -14,6 +14,12 @@ export class BinaryTreeNode<T> {
 
 interface IBinaryTree<T> {
   insert(key: T): void;
+
+  preOrder(): T[];
+
+  inOrder(): T[];
+
+  postOrder(): T[];
 }
 
 class BinaryTree<T = number> implements IBinaryTree<T> {
@@ -61,6 +67,57 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
       }
       this.insertNode(root.right, node);
     }
+  }
+
+  preOrder() {
+    const result: T[] = [];
+
+    const _preOrder = (root: BinaryTreeNode<T> | null) => {
+      if (isNull(root)) {
+        return;
+      }
+      result.push(root.key);
+      _preOrder(root.left);
+      _preOrder(root.right);
+    };
+
+    _preOrder(this.root);
+
+    return result;
+  }
+
+  inOrder() {
+    const result: T[] = [];
+
+    const _inOrder = (root: BinaryTreeNode<T> | null) => {
+      if (isNull(root)) {
+        return;
+      }
+      _inOrder(root.left);
+      result.push(root.key);
+      _inOrder(root.right);
+    };
+
+    _inOrder(this.root);
+
+    return result;
+  }
+
+  postOrder() {
+    const result: T[] = [];
+
+    const _postOrder = (root: BinaryTreeNode<T> | null) => {
+      if (isNull(root)) {
+        return;
+      }
+      _postOrder(root.left);
+      _postOrder(root.right);
+      result.push(root.key);
+    };
+
+    _postOrder(this.root);
+
+    return result;
   }
 }
 

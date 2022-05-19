@@ -1,31 +1,50 @@
 import { isNotNull, isNull } from '@/_utils/is';
 
-export class SinglyLinkedNode {
-  key: number;
-  next: SinglyLinkedNode | null;
+export class SinglyLinkedNode<T> {
+  key: T;
+  next: SinglyLinkedNode<T> | null;
 
-  constructor(key: number) {
+  constructor(key: T) {
     this.key = key;
     this.next = null;
   }
 }
 
-interface ISinglyLinkedList {
-  insert: (key: number) => void;
+interface ISinglyLinkedList<T> {
+  getHead(): SinglyLinkedNode<T> | null;
 
-  search: (key: number) => SinglyLinkedNode | null;
+  len(): number;
 
-  remove: (key: number) => void;
+  insert(key: T): void;
+
+  search(key: T): SinglyLinkedNode<T> | null;
+
+  remove(key: T): void;
+
+  /**
+   * Get list of key in order
+   */
+  toString(): T[];
 }
 
-export default class SinglyLinkedList implements ISinglyLinkedList {
-  head: SinglyLinkedNode | null;
+export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
+  private head: SinglyLinkedNode<T> | null;
+  private length: number = 0;
 
   constructor() {
     this.head = null;
   }
 
-  insert(key: number) {
+  getHead() {
+    return this.head;
+  }
+
+  len() {
+    return this.length;
+  }
+
+  insert(key: T) {
+    this.length = this.length + 1;
     const newNode = new SinglyLinkedNode(key);
 
     if (isNull(this.head)) {
@@ -36,29 +55,43 @@ export default class SinglyLinkedList implements ISinglyLinkedList {
     this.head = newNode;
   }
 
-  search(key: number) {
+  search(key: T) {
     let headCache = this.head;
-    while (isNotNull<SinglyLinkedNode>(headCache) && headCache.key !== key) {
+    while (isNotNull<SinglyLinkedNode<T>>(headCache) && headCache.key !== key) {
       headCache = headCache.next;
     }
     return headCache;
   }
 
-  remove(key: number) {
+  remove(key: T) {
     if (this.head?.key === key) {
+      this.length = this.length - 1;
       return (this.head = this.head.next);
     }
 
-    let headTmp = new SinglyLinkedNode(key);
-    headTmp.next = this.head;
+    let headCache = new SinglyLinkedNode(key);
+    headCache.next = this.head;
 
-    while (headTmp?.next) {
-      if (headTmp.next.key === key) {
+    while (headCache?.next) {
+      if (headCache.next.key === key) {
+        headCache.next = headCache.next?.next || null;
+        this.length = this.length - 1;
         break;
       }
-      headTmp = headTmp.next;
+      headCache = headCache.next;
+    }
+  }
+
+  toString(): T[] {
+    const result: T[] = [];
+
+    let headCache = this.head;
+
+    while (headCache) {
+      result.push(headCache.key);
+      headCache = headCache.next;
     }
 
-    headTmp.next = headTmp.next?.next || null;
+    return result;
   }
 }

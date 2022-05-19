@@ -12,4 +12,12 @@ describe('Tree.BinaryTree', () => {
     expect(bTree.getRoot()?.left).toEqual(new BinaryTreeNode(0));
     expect(bTree.getRoot()?.right).toEqual(new BinaryTreeNode(2));
   });
+
+  it('order: should return order key array', () => {
+    expect(bTree.preOrder()).toEqual([1, 0, 2]);
+
+    expect(bTree.inOrder()).toEqual([0, 1, 2]);
+
+    expect(bTree.postOrder()).toEqual([0, 2, 1]);
+  });
 });

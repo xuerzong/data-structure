@@ -1,4 +1,3 @@
-
 import typescript from "rollup-plugin-typescript2";
 
 const input = 'src/index.ts'
