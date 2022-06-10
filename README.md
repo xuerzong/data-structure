@@ -13,8 +13,7 @@ yarn add @xuerzong/data-structure
 - [x] Queue
 - [x] Stack
 - [x] LinkedList
-- [ ] Tree
-- ...
+- [x] Tree
 
 ## License
 
