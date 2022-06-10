@@ -1,6 +1,6 @@
 {
   "name": "@xuerzong/data-structure",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "xuerzong <xuerzong@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
