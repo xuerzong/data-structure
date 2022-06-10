@@ -1,11 +1,11 @@
-import typescript from "rollup-plugin-typescript2";
+import typescript from 'rollup-plugin-typescript2'
 
 const input = 'src/index.ts'
 
 const plugins = [
   typescript({
-    tsconfig: 'tsconfig-build.json'
-  })
+    tsconfig: 'tsconfig-build.json',
+  }),
 ]
 
 export default {
@@ -13,13 +13,12 @@ export default {
   output: [
     {
       format: 'cjs',
-      file: input.replace('src/', 'dist/').replace('.ts', '.js')
+      file: input.replace('src/', 'dist/').replace('.ts', '.js'),
     },
     {
       format: 'es',
-      file: input.replace('src/', 'dist/').replace('.ts', '.es.js')
-    }
+      file: input.replace('src/', 'dist/').replace('.ts', '.es.js'),
+    },
   ],
-  plugins
+  plugins,
 }
-

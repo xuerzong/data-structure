@@ -22,7 +22,7 @@
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "test": "jest",
-    "format": "prettier --write src/**/*.ts",
+    "format": "prettier --write .",
     "prepare": "husky install"
   },
   "devDependencies": {

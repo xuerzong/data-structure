@@ -3,7 +3,5 @@
   "compilerOptions": {
     "module": "ESNext"
   },
-  "exclude": [
-    "src/**/*.test.ts"
-  ]
+  "exclude": ["src/**/*.test.ts"]
 }
