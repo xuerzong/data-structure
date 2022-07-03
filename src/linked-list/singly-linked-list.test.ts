@@ -39,12 +39,12 @@ describe('LinkedList.SinglyLinkedList', () => {
     expect(linked.getHead()).toEqual(new SinglyLinkedNode(1))
   })
 
-  it('toString: should return the key list in order', () => {
+  it('toArray: should return the key list in order', () => {
     // linked: [2, 1]
     linked.insert(2)
-    expect(linked.toString()).toEqual([2, 1])
+    expect(linked.toArray()).toEqual([2, 1])
 
     linked.insert(3)
-    expect(linked.toString()).toEqual([3, 2, 1])
+    expect(linked.toArray()).toEqual([3, 2, 1])
   })
 })
