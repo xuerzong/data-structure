@@ -22,9 +22,9 @@ interface ISinglyLinkedList<T> {
   remove(key: T): void
 
   /**
-   * Get list of key in order
+   * Get array of key in order
    */
-  toString(): T[]
+  toArray(): T[]
 }
 
 export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
@@ -82,7 +82,7 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     }
   }
 
-  toString(): T[] {
+  toArray(): T[] {
     const result: T[] = []
 
     let headCache = this.head
