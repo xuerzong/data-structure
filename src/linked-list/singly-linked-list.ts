@@ -1,4 +1,4 @@
-import { isNotNull, isNull } from '@/_utils/is'
+import { isNull } from '@/_utils/is'
 
 export class SinglyLinkedNode<T> {
   key: T
@@ -17,9 +17,17 @@ interface ISinglyLinkedList<T> {
 
   insert(key: T): void
 
-  search(key: T): SinglyLinkedNode<T> | null
+  insertByIndex(index: number, value: T): void
 
-  remove(key: T): void
+  insertFromHead(value: T): void
+
+  insertFromTail(value: T): void
+
+  findByIndex(index: number): SinglyLinkedNode<T> | null
+
+  updateByIndex(index: number, value: T): void
+
+  removeByIndex(index: number): void
 
   /**
    * Get array of key in order
@@ -55,30 +63,62 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     this.head = newNode
   }
 
-  search(key: T) {
+  insertByIndex(index: number, value: T) {
+    if (this.length === 0) {
+      return this.insertFromHead(value)
+    }
+
+    if (index > this.length) {
+      // TODO optimize
+      return this.insertFromTail(value)
+    }
+
+    this.length = this.length + 1
+    const preNode = this.findByIndex(index - 1) as SinglyLinkedNode<T>
+    const newNode = new SinglyLinkedNode(value)
+    newNode.next = preNode.next
+    preNode.next = newNode
+  }
+
+  insertFromHead(value: T) {
+    this.insert(value)
+  }
+
+  insertFromTail(value: T) {
+    this.insertByIndex(this.length, value)
+  }
+
+  findByIndex(index: number) {
     let headCache = this.head
-    while (isNotNull<SinglyLinkedNode<T>>(headCache) && headCache.key !== key) {
-      headCache = headCache.next
+
+    const oversize = index < 0 || index > this.length
+    if (oversize) {
+      return null
+    }
+
+    let i = 0
+    while (i++ < index) {
+      headCache = headCache!.next
     }
     return headCache
   }
 
-  remove(key: T) {
-    if (this.head?.key === key) {
-      this.length = this.length - 1
-      return (this.head = this.head.next)
+  updateByIndex(index: number, value: T) {
+    const curNode = this.findByIndex(index)
+    if (isNull(curNode)) {
+      // pass
+    } else {
+      curNode.key = value
     }
+  }
 
-    let headCache = new SinglyLinkedNode(key)
-    headCache.next = this.head
-
-    while (headCache?.next) {
-      if (headCache.next.key === key) {
-        headCache.next = headCache.next?.next || null
-        this.length = this.length - 1
-        break
-      }
-      headCache = headCache.next
+  removeByIndex(index: number) {
+    const preNode = this.findByIndex(index - 1)
+    if (isNull(preNode)) {
+      // pass
+    } else {
+      this.length = this.length - 1
+      preNode.next = preNode.next?.next || null
     }
   }
 
