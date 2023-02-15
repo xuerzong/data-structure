@@ -19,3 +19,5 @@ export const isNull = (value: unknown): value is null => is(value, 'Null')
 
 export const isNotNull = <T = unknown>(value: unknown): value is T =>
   !isNull(value)
+
+export const isNumber = (value: unknown): value is number => is(value, 'Number')

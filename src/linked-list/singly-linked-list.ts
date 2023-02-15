@@ -1,11 +1,11 @@
 import { isNull } from '@/_utils/is'
 
 export class SinglyLinkedNode<T> {
-  key: T
+  value: T
   next: SinglyLinkedNode<T> | null
 
-  constructor(key: T) {
-    this.key = key
+  constructor(value: T) {
+    this.value = value
     this.next = null
   }
 }
@@ -15,7 +15,7 @@ interface ISinglyLinkedList<T> {
 
   len(): number
 
-  insert(key: T): void
+  insert(value: T): void
 
   insertByIndex(index: number, value: T): void
 
@@ -30,7 +30,7 @@ interface ISinglyLinkedList<T> {
   removeByIndex(index: number): void
 
   /**
-   * Get array of key in order
+   * Get array of value in order
    */
   toArray(): T[]
 }
@@ -51,9 +51,9 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     return this.length
   }
 
-  insert(key: T) {
+  insert(value: T) {
     this.length = this.length + 1
-    const newNode = new SinglyLinkedNode(key)
+    const newNode = new SinglyLinkedNode(value)
 
     if (isNull(this.head)) {
       return (this.head = newNode)
@@ -108,15 +108,18 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     if (isNull(curNode)) {
       // pass
     } else {
-      curNode.key = value
+      curNode.value = value
     }
   }
 
   removeByIndex(index: number) {
+    if (index === 0 && this.head) {
+      this.length = this.length - 1
+      return (this.head = this.head.next)
+    }
+
     const preNode = this.findByIndex(index - 1)
-    if (isNull(preNode)) {
-      // pass
-    } else {
+    if (preNode) {
       this.length = this.length - 1
       preNode.next = preNode.next?.next || null
     }
@@ -128,7 +131,7 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     let headCache = this.head
 
     while (headCache) {
-      result.push(headCache.key)
+      result.push(headCache.value)
       headCache = headCache.next
     }
 

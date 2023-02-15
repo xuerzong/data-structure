@@ -9,15 +9,15 @@ describe('LinkedList.SinglyLinkedList', () => {
   it('insert: should be the new node', () => {
     linked.insert(0)
     expect(linked.len()).toBe(1)
-    expect(linked.getHead()?.key).toBe(0)
+    expect(linked.getHead()?.value).toBe(0)
 
     linked.insert(1)
     expect(linked.len()).toBe(2)
-    expect(linked.getHead()?.key).toBe(1)
-    expect(linked.getHead()?.next?.key).toBe(0)
+    expect(linked.getHead()?.value).toBe(1)
+    expect(linked.getHead()?.next?.value).toBe(0)
   })
 
-  it('toArray: should return the key list', () => {
+  it('toArray: should return the value list', () => {
     linked.insert(0)
     linked.insert(1)
     expect(linked.len()).toBe(2)
@@ -61,15 +61,15 @@ describe('LinkedList.SinglyLinkedList', () => {
     expect(linked.toArray()).toEqual([0, 2, 1])
   })
 
-  it('findByIndex: should return the key at index', () => {
+  it('findByIndex: should return the value at index', () => {
     linked.insert(0)
     linked.insert(1)
-    expect(linked.findByIndex(0)?.key).toEqual(1)
+    expect(linked.findByIndex(0)?.value).toEqual(1)
     expect(linked.findByIndex(-1)).toBe(null)
     expect(linked.findByIndex(linked.len() + 1)).toBe(null)
   })
 
-  it('updateByIndex: should update the key at index', () => {
+  it('updateByIndex: should update the value at index', () => {
     linked.insert(0)
     linked.insert(1)
     linked.updateByIndex(0, 4)
@@ -77,7 +77,7 @@ describe('LinkedList.SinglyLinkedList', () => {
     expect(linked.toArray()).toEqual([4, 3])
   })
 
-  it('removeByIndex: should remove the key at index', () => {
+  it('removeByIndex: should remove the value at index', () => {
     linked.insert(0)
     linked.insert(1)
     linked.insert(2)
@@ -85,5 +85,9 @@ describe('LinkedList.SinglyLinkedList', () => {
     linked.removeByIndex(1)
     expect(linked.len()).toBe(2)
     expect(linked.toArray()).toEqual([2, 0])
+
+    linked.removeByIndex(0)
+    expect(linked.len()).toBe(1)
+    expect(linked.toArray()).toEqual([0])
   })
 })
