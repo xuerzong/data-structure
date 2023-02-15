@@ -1,36 +1,42 @@
+import SinglyLinkedList from '@/linked-list/singly-linked-list'
+import { isNull } from '@/_utils/is'
+
 interface IQueue<T> {
-  enqueue: (value: T) => void
+  enqueue(value: T): void
 
-  dequeue: () => T
+  dequeue(): T | null
 
-  len: () => number
+  readonly length: number
+
+  [Symbol.iterator](): IterableIterator<T>
 }
 
 export default class Queue<T = unknown> implements IQueue<T> {
-  private readonly value: T[]
-  head: T | undefined
+  private readonly queue: SinglyLinkedList<T>
 
   constructor() {
-    this.value = [] as T[]
+    this.queue = new SinglyLinkedList()
   }
 
-  len() {
-    return this.value.length
-  }
-
-  enqueue<U extends T[]>(...args: U) {
-    if (args.length > 0 && this.len() === 0) {
-      this.head = args[0]
-    }
-    this.value.push(...args)
+  enqueue(...values: T[]) {
+    values.forEach((v) => this.queue.insertFromTail(v))
   }
 
   dequeue() {
-    if (this.len() === 0) {
-      throw new Error('underflow')
+    const head = this.queue.getHead()
+    this.queue.removeByIndex(0)
+    return isNull(head) ? null : head.value
+  }
+
+  get length() {
+    return this.queue.len()
+  }
+
+  *[Symbol.iterator]() {
+    let current = this.queue.getHead()
+    while (current) {
+      yield current.value
+      current = current.next
     }
-    const headRes = this.value.shift() as T
-    this.head = this.value[0]
-    return headRes
   }
 }
