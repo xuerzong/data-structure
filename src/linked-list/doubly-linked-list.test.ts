@@ -90,3 +90,10 @@ describe('LinkedList.DoublyLinkedList', () => {
     expect([...linked]).toEqual([2, 0])
   })
 })
+
+describe('LinkedList.DoublyLinkedNode', () => {
+  it('should be iterable', () => {
+    const node = new DoublyLinkedNode(1)
+    expect([...node]).toEqual([1])
+  })
+})

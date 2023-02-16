@@ -8,6 +8,14 @@ export class SinglyLinkedNode<T> {
     this.value = value
     this.next = null
   }
+
+  *[Symbol.iterator]() {
+    let current: SinglyLinkedNode<T> | null = this
+    while (current) {
+      yield current.value
+      current = current.next
+    }
+  }
 }
 
 interface ISinglyLinkedList<T> {

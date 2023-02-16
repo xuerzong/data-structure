@@ -1,4 +1,4 @@
-import SinglyLinkedList from './singly-linked-list'
+import SinglyLinkedList, { SinglyLinkedNode } from './singly-linked-list'
 
 let linked: SinglyLinkedList<number>
 describe('LinkedList.SinglyLinkedList', () => {
@@ -89,5 +89,12 @@ describe('LinkedList.SinglyLinkedList', () => {
     linked.removeByIndex(0)
     expect(linked.length).toBe(1)
     expect([...linked]).toEqual([0])
+  })
+})
+
+describe('LinkedList.SinglyLinkedNode', () => {
+  it('should be iterable', () => {
+    const node = new SinglyLinkedNode(1)
+    expect([...node]).toEqual([1])
   })
 })
