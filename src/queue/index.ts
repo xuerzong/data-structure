@@ -23,17 +23,17 @@ export default class Queue<T = unknown> implements IQueue<T> {
   }
 
   dequeue() {
-    const head = this.queue.getHead()
+    const head = this.queue.head
     this.queue.removeByIndex(0)
     return isNull(head) ? null : head.value
   }
 
   get length() {
-    return this.queue.len()
+    return this.queue.length
   }
 
   *[Symbol.iterator]() {
-    let current = this.queue.getHead()
+    let current = this.queue.head
     while (current) {
       yield current.value
       current = current.next
