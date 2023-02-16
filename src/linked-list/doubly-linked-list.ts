@@ -10,6 +10,14 @@ export class DoublyLinkedNode<T> {
     this.prev = null
     this.next = null
   }
+
+  *[Symbol.iterator]() {
+    let current: DoublyLinkedNode<T> | null = this
+    while (current) {
+      yield current.value
+      current = current.next
+    }
+  }
 }
 
 interface IDoublyLinkedList<T> {
