@@ -11,9 +11,9 @@ export class SinglyLinkedNode<T> {
 }
 
 interface ISinglyLinkedList<T> {
-  getHead(): SinglyLinkedNode<T> | null
+  readonly head: SinglyLinkedNode<T> | null
 
-  len(): number
+  readonly length: number
 
   insert(value: T): void
 
@@ -29,51 +29,48 @@ interface ISinglyLinkedList<T> {
 
   removeByIndex(index: number): void
 
-  /**
-   * Get array of value in order
-   */
-  toArray(): T[]
+  [Symbol.iterator](): IterableIterator<T>
 }
 
 export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
-  private head: SinglyLinkedNode<T> | null
-  private length: number = 0
+  private _head: SinglyLinkedNode<T> | null
+  private _length: number = 0
 
   constructor() {
-    this.head = null
+    this._head = null
   }
 
-  getHead() {
-    return this.head
+  get length() {
+    return this._length
   }
 
-  len() {
-    return this.length
+  get head() {
+    return this._head
   }
 
   insert(value: T) {
-    this.length = this.length + 1
+    this._length++
     const newNode = new SinglyLinkedNode(value)
 
-    if (isNull(this.head)) {
-      return (this.head = newNode)
+    if (isNull(this._head)) {
+      return (this._head = newNode)
     }
 
-    newNode.next = this.head
-    this.head = newNode
+    newNode.next = this._head
+    this._head = newNode
   }
 
   insertByIndex(index: number, value: T) {
-    if (this.length === 0) {
+    if (this._length === 0) {
       return this.insertFromHead(value)
     }
 
-    if (index > this.length) {
+    if (index > this._length) {
       // TODO optimize
       return this.insertFromTail(value)
     }
 
-    this.length = this.length + 1
+    this._length = this._length + 1
     const preNode = this.findByIndex(index - 1) as SinglyLinkedNode<T>
     const newNode = new SinglyLinkedNode(value)
     newNode.next = preNode.next
@@ -85,14 +82,14 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
   }
 
   insertFromTail(value: T) {
-    this.insertByIndex(this.length, value)
+    this.insertByIndex(this._length, value)
   }
 
   findByIndex(index: number) {
-    let headCache = this.head
+    let headCache = this._head
 
-    const oversize = index < 0 || index > this.length
-    if (oversize) {
+    const over_length = index < 0 || index > this._length
+    if (over_length) {
       return null
     }
 
@@ -113,28 +110,23 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
   }
 
   removeByIndex(index: number) {
-    if (index === 0 && this.head) {
-      this.length = this.length - 1
-      return (this.head = this.head.next)
+    if (index === 0 && this._head) {
+      this._length--
+      return (this._head = this._head.next)
     }
 
     const preNode = this.findByIndex(index - 1)
     if (preNode) {
-      this.length = this.length - 1
+      this._length--
       preNode.next = preNode.next?.next || null
     }
   }
 
-  toArray(): T[] {
-    const result: T[] = []
-
-    let headCache = this.head
-
-    while (headCache) {
-      result.push(headCache.value)
-      headCache = headCache.next
+  *[Symbol.iterator]() {
+    let current = this._head
+    while (current) {
+      yield current.value
+      current = current.next
     }
-
-    return result
   }
 }

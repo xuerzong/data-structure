@@ -4,6 +4,7 @@ export class DoublyLinkedNode<T> {
   value: T
   prev: DoublyLinkedNode<T> | null
   next: DoublyLinkedNode<T> | null
+
   constructor(key: T) {
     this.value = key
     this.prev = null
@@ -12,7 +13,9 @@ export class DoublyLinkedNode<T> {
 }
 
 interface IDoublyLinkedList<T> {
-  len(): number
+  readonly length: number
+
+  readonly head: DoublyLinkedNode<T> | null
 
   insert(value: T): void
 
@@ -28,44 +31,48 @@ interface IDoublyLinkedList<T> {
 
   removeByIndex(index: number): void
 
-  toArray(): T[]
+  [Symbol.iterator](): IterableIterator<T>
 }
 
 export default class DoublyLinkedList<T = any> implements IDoublyLinkedList<T> {
-  head: DoublyLinkedNode<T> | null
-  private length: number = 0
+  private _head: DoublyLinkedNode<T> | null
+  private _length: number = 0
 
   constructor() {
-    this.head = null
+    this._head = null
   }
 
-  len() {
-    return this.length
+  get head() {
+    return this._head
+  }
+
+  get length() {
+    return this._length
   }
 
   insert(value: T) {
-    this.length = this.length + 1
+    this._length++
     const newNode = new DoublyLinkedNode(value)
 
-    newNode.next = this.head
-    if (isNotNull<DoublyLinkedNode<T>>(this.head)) {
-      this.head.prev = newNode
+    newNode.next = this._head
+    if (isNotNull<DoublyLinkedNode<T>>(this._head)) {
+      this._head.prev = newNode
     }
 
-    this.head = newNode
+    this._head = newNode
   }
 
   insertByIndex(index: number, value: T) {
-    if (this.length === 0) {
+    if (this._length === 0) {
       return this.insertFromHead(value)
     }
 
-    if (this.length > this.length) {
+    if (this._length > this._length) {
       // TODO optimize
       return this.insertFromTail(value)
     }
 
-    this.length = this.length + 1
+    this._length++
 
     const preNode = this.findByIndex(index - 1) as DoublyLinkedNode<T>
     const newNode = new DoublyLinkedNode(value)
@@ -81,22 +88,22 @@ export default class DoublyLinkedList<T = any> implements IDoublyLinkedList<T> {
   }
 
   insertFromTail(value: T): void {
-    this.insertByIndex(this.length, value)
+    this.insertByIndex(this._length, value)
   }
 
   findByIndex(index: number) {
-    let headCache = this.head
+    let _headCache = this._head
 
-    const oversize = index < 0 || index > this.length
+    const oversize = index < 0 || index > this._length
     if (oversize) {
       return null
     }
 
     let i = 0
     while (i++ < index) {
-      headCache = headCache!.next
+      _headCache = _headCache!.next
     }
-    return headCache
+    return _headCache
   }
 
   updateByIndex(index: number, value: T) {
@@ -115,11 +122,11 @@ export default class DoublyLinkedList<T = any> implements IDoublyLinkedList<T> {
       return
     }
 
-    this.length = this.length - 1
+    this._length--
 
     if (isNull(curNode.prev)) {
-      // current node is head node
-      this.head = curNode.next
+      // current node is _head node
+      this._head = curNode.next
     } else {
       curNode.prev.next = curNode.next
     }
@@ -129,16 +136,11 @@ export default class DoublyLinkedList<T = any> implements IDoublyLinkedList<T> {
     }
   }
 
-  toArray() {
-    const result: T[] = []
-
-    let headCache = this.head
-
-    while (headCache) {
-      result.push(headCache.value)
-      headCache = headCache.next
+  *[Symbol.iterator]() {
+    let current = this._head
+    while (current) {
+      yield current.value
+      current = current.next
     }
-
-    return result
   }
 }
