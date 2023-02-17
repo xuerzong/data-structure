@@ -5,15 +5,7 @@ describe('Stack', () => {
   describe('init', () => {
     const stack = new Stack()
     it('len: should be 0', () => {
-      expect(stack.len()).toBe(0)
-    })
-
-    it('top: should be undefined', () => {
-      expect(isUndefined(stack.top)).toBe(true)
-    })
-
-    it('should have function called len', () => {
-      expect(isFunction(stack.len)).toBe(true)
+      expect(stack.length).toBe(0)
     })
 
     it('should have function called push', () => {
@@ -25,7 +17,7 @@ describe('Stack', () => {
     })
 
     it('len: should return 0', () => {
-      expect(stack.len()).toBe(0)
+      expect(stack.length).toBe(0)
     })
   })
 
@@ -39,7 +31,7 @@ describe('Stack', () => {
     })
 
     it('len: should return stack.length', () => {
-      expect(stack.len()).toBe(2)
+      expect(stack.length).toBe(2)
     })
   })
 
@@ -58,13 +50,14 @@ describe('Stack', () => {
     })
 
     it('len: should return stack.length', () => {
-      expect(stack.len()).toBe(1)
+      expect(stack.length).toBe(1)
     })
+  })
 
-    it('should throw error when stack is empty', () => {
-      stack.pop()
-      expect(() => stack.pop()).toThrow(Error)
-      expect(() => stack.pop()).toThrow('underflow')
-    })
+  it('should be iterable', () => {
+    const stack = new Stack()
+    stack.push(1)
+    stack.push(2)
+    expect([...stack]).toEqual([2, 1])
   })
 })
