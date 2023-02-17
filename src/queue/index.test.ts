@@ -44,4 +44,11 @@ describe('Queue', () => {
       expect(queue.length).toBe(1)
     })
   })
+
+  it('should be iterable', () => {
+    const queue = new Queue()
+    queue.enqueue(1)
+    queue.enqueue(2)
+    expect([...queue]).toEqual([1, 2])
+  })
 })
