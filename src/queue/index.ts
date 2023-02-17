@@ -12,28 +12,28 @@ interface IQueue<T> {
 }
 
 export default class Queue<T = unknown> implements IQueue<T> {
-  private readonly queue: SinglyLinkedList<T>
+  private readonly _value: SinglyLinkedList<T>
 
   constructor() {
-    this.queue = new SinglyLinkedList()
+    this._value = new SinglyLinkedList()
   }
 
   enqueue(...values: T[]) {
-    values.forEach((v) => this.queue.insertFromTail(v))
+    values.forEach((v) => this._value.insertFromTail(v))
   }
 
   dequeue() {
-    const head = this.queue.head
-    this.queue.removeByIndex(0)
+    const head = this._value.head
+    this._value.removeByIndex(0)
     return isNull(head) ? null : head.value
   }
 
   get length() {
-    return this.queue.length
+    return this._value.length
   }
 
   *[Symbol.iterator]() {
-    let current = this.queue.head
+    let current = this._value.head
     while (current) {
       yield current.value
       current = current.next
