@@ -1,6 +1,19 @@
-## unrelease
+## v0.3.1(2023-02-17)
 
-TODO
+- `SinglyLinkedList` and `DoublyLinkedList`
+  - remove `toArray`
+  - remove `len()`
+  - add `length`
+  - add `[Symbol.iterator]`
+
+- `SinglyLinkedNode` and `DoublyLinkedNode`
+  - add `[Symbol.iterator]`
+
+- `Queue` and `Stack` 
+  - remove `len()`
+  - add `length`
+  - add `[Symbol.iterator]`
+
 
 ## v0.3.0(2022-07-04)
 
