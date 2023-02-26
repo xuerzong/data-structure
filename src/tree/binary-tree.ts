@@ -1,19 +1,21 @@
-import { isNull } from '@/_utils/is'
+import { isNull, isUndefined } from '@/_utils/is'
+import chunk from '@/_utils/chunk'
+import Queue from '../queue'
 
 export class BinaryTreeNode<T> {
-  key: T
+  value: T
   right: BinaryTreeNode<T> | null
   left: BinaryTreeNode<T> | null
 
-  constructor(key: T) {
-    this.key = key
+  constructor(value: T) {
+    this.value = value
     this.right = null
     this.left = null
   }
 }
 
 interface IBinaryTree<T> {
-  insert(key: T): void
+  insert(value: T): void
 
   preOrder(): T[]
 
@@ -23,26 +25,60 @@ interface IBinaryTree<T> {
 }
 
 class BinaryTree<T = number> implements IBinaryTree<T> {
-  private root: BinaryTreeNode<T> | null
+  private _root: BinaryTreeNode<T> | null
+
+  static generate<T extends number>(...args: (T | null)[]) {
+    if (args.length <= 0) {
+      throw new Error('The value list should not be empty')
+    }
+
+    if (isNull(args[0])) {
+      throw new Error('The first value should not be null')
+    }
+
+    const tree = new BinaryTree<T>()
+    tree.insert(args[0])
+
+    const nodes = chunk(args.slice(1), 2)
+
+    const queue = new Queue<BinaryTreeNode<T> | null>()
+    queue.enqueue(tree.root)
+
+    let index = 0
+    while (index < nodes.length) {
+      const node = nodes[index++]
+      const root = queue.dequeue()
+      const left = BinaryTree.generateNode(node[0])
+      const right = BinaryTree.generateNode(node[1])
+      queue.enqueue(left, right)
+      if (root) {
+        ;[root.left, root.right] = [left, right]
+      }
+    }
+
+    return tree
+  }
+
+  static generateNode<T extends number>(value?: T | null) {
+    if (isNull(value) || isUndefined(value)) return null
+    return new BinaryTreeNode(value)
+  }
 
   constructor() {
-    this.root = null
-  }
-  /**
-   * Get root for test
-   * @returns this.root
-   */
-  getRoot() {
-    return this.root
+    this._root = null
   }
 
-  insert(key: T) {
-    const newNode = new BinaryTreeNode<T>(key)
-    if (this.root === null) {
-      this.root = newNode
+  get root() {
+    return this._root
+  }
+
+  insert(value: T) {
+    const newNode = new BinaryTreeNode<T>(value)
+    if (this._root === null) {
+      this._root = newNode
       return
     }
-    this.insertNode(this.root, newNode)
+    this.insertNode(this._root, newNode)
   }
 
   private insertNode(root: BinaryTreeNode<T>, node: BinaryTreeNode<T>) {
@@ -50,7 +86,7 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
      * if `new node key` is lower than `root key`
      * insert node into root left
      */
-    if (root.key > node.key) {
+    if (root.value > node.value) {
       if (isNull(root.left)) {
         root.left = node
         return
@@ -76,12 +112,12 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
       if (isNull(root)) {
         return
       }
-      result.push(root.key)
+      result.push(root.value)
       _preOrder(root.left)
       _preOrder(root.right)
     }
 
-    _preOrder(this.root)
+    _preOrder(this._root)
 
     return result
   }
@@ -94,11 +130,11 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
         return
       }
       _inOrder(root.left)
-      result.push(root.key)
+      result.push(root.value)
       _inOrder(root.right)
     }
 
-    _inOrder(this.root)
+    _inOrder(this._root)
 
     return result
   }
@@ -112,10 +148,10 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
       }
       _postOrder(root.left)
       _postOrder(root.right)
-      result.push(root.key)
+      result.push(root.value)
     }
 
-    _postOrder(this.root)
+    _postOrder(this._root)
 
     return result
   }
