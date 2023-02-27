@@ -22,6 +22,17 @@ interface IBinaryTree<T> {
   inOrder(): T[]
 
   postOrder(): T[]
+
+  /**
+   * Breath first search
+   *
+   * ```
+   * const input = [1, 2, 3, 4, 5, 6] 👈
+   * const tree = BinaryTree.generate(...input)
+   * tree.dfs() // input ✅
+   * ```
+   */
+  bfs(): T[]
 }
 
 class BinaryTree<T = number> implements IBinaryTree<T> {
@@ -152,6 +163,24 @@ class BinaryTree<T = number> implements IBinaryTree<T> {
     }
 
     _postOrder(this._root)
+
+    return result
+  }
+
+  bfs() {
+    if (isNull(this.root)) return [] as T[]
+
+    const result: T[] = []
+
+    const queue = new Queue<BinaryTreeNode<T>>()
+    queue.enqueue(this.root)
+
+    while (queue.length) {
+      const node = queue.dequeue()!
+      node.left && queue.enqueue(node.left)
+      node.right && queue.enqueue(node.right)
+      result.push(node.value)
+    }
 
     return result
   }

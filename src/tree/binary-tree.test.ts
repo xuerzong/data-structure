@@ -25,4 +25,10 @@ describe('Tree.BinaryTree', () => {
     const tree = BinaryTree.generate(5, 2, 0, 1, 3, 1, 4)
     expect(tree.inOrder()).toEqual([1, 2, 3, 5, 1, 0, 4])
   })
+
+  it('bsf: should return order value list', () => {
+    const input = [5, 2, 0, 1, 3, 1, 4]
+    const tree = BinaryTree.generate(...input)
+    expect(tree.bfs()).toEqual(input)
+  })
 })
