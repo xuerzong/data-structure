@@ -33,7 +33,7 @@ function invertTree(root: TreeNode | null): TreeNode | null {
 
 const tree = BinaryTree.generate(...[2, 1, 3])
 invertTree(tree.root)
-console.log(tree.preOrder()) // [2, 3, 1]
+console.log(tree.bfs()) // [2, 1, 3]
 ```
 
 ## To do list
