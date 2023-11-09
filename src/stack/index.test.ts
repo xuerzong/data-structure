@@ -58,6 +58,6 @@ describe('Stack', () => {
     const stack = new Stack()
     stack.push(1)
     stack.push(2)
-    expect([...stack]).toEqual([2, 1])
+    expect([...stack]).toEqual([1, 2])
   })
 })

@@ -1,5 +1,4 @@
 import SinglyLinkedList from '@/linked-list/singly-linked-list'
-import { isNull } from '@/_utils/is'
 
 interface IQueue<T> {
   enqueue(value: T): void
@@ -19,13 +18,11 @@ export default class Queue<T = unknown> implements IQueue<T> {
   }
 
   enqueue(...values: T[]) {
-    values.forEach((v) => this._value.insertFromTail(v))
+    values.forEach((v) => this._value.push(v))
   }
 
   dequeue() {
-    const head = this._value.head
-    this._value.removeByIndex(0)
-    return isNull(head) ? null : head.value
+    return this._value.shift()
   }
 
   get length() {

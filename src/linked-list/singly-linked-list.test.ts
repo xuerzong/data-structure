@@ -6,89 +6,121 @@ describe('LinkedList.SinglyLinkedList', () => {
     linked = new SinglyLinkedList()
   })
 
-  it('insert: should be the new node', () => {
-    linked.insert(0)
+  it('unshift: should insert new node from head', () => {
+    linked.unshift(0)
     expect(linked.length).toBe(1)
     expect(linked.head?.value).toBe(0)
 
-    linked.insert(1)
+    linked.unshift(1)
     expect(linked.length).toBe(2)
     expect(linked.head?.value).toBe(1)
     expect(linked.head?.next?.value).toBe(0)
   })
 
-  it('toArray: should return the value list', () => {
-    linked.insert(0)
-    linked.insert(1)
-    expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([1, 0])
-
-    linked.insert(2)
+  it('shift: should return the head node', () => {
+    linked.unshift(0)
+    linked.unshift(1)
+    linked.unshift(2)
     expect(linked.length).toBe(3)
-    expect([...linked]).toEqual([2, 1, 0])
+    expect(linked.shift()).toBe(2)
+    expect(linked.length).toBe(2)
+    expect(linked.head?.value).toBe(1)
+    expect(linked.head?.next?.value).toBe(0)
+
+    linked.shift()
+    linked.shift()
+    expect(linked.length).toBe(0)
+    expect(linked.head).toBe(null)
   })
 
-  it('insertFromHead: should insert new node from link-list head', () => {
-    linked.insertFromHead(0)
-    linked.insertFromHead(1)
-    expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([1, 0])
-
-    linked.insertFromHead(2)
-    expect(linked.length).toBe(3)
-    expect([...linked]).toEqual([2, 1, 0])
-  })
-
-  it('insertFromTail: should insert new node from link-list tail', () => {
-    linked.insertFromTail(0)
-    linked.insertFromTail(1)
+  it('push: should insert new node from tail', () => {
+    linked.push(0)
+    linked.push(1)
     expect(linked.length).toBe(2)
     expect([...linked]).toEqual([0, 1])
 
-    linked.insertFromTail(2)
+    linked.push(2)
     expect(linked.length).toBe(3)
     expect([...linked]).toEqual([0, 1, 2])
   })
 
-  it('insertByIndex: should insert new node at index', () => {
-    linked.insertByIndex(0, 0)
-    linked.insertByIndex(1, 1)
+  it('pop: should return the tail node', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
+    expect(linked.length).toBe(3)
+    expect(linked.pop()).toBe(2)
     expect(linked.length).toBe(2)
     expect([...linked]).toEqual([0, 1])
+    linked.pop()
+    linked.pop()
+    expect(linked.length).toBe(0)
+    expect([...linked]).toEqual([])
+  })
 
-    linked.insertByIndex(1, 2)
+  it('remove: should remove the node with the given value', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
     expect(linked.length).toBe(3)
-    expect([...linked]).toEqual([0, 2, 1])
-  })
-
-  it('findByIndex: should return the value at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    expect(linked.findByIndex(0)?.value).toEqual(1)
-    expect(linked.findByIndex(-1)).toBe(null)
-    expect(linked.findByIndex(linked.length + 1)).toBe(null)
-  })
-
-  it('updateByIndex: should update the value at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    linked.updateByIndex(0, 4)
-    linked.updateByIndex(1, 3)
-    expect([...linked]).toEqual([4, 3])
-  })
-
-  it('removeByIndex: should remove the value at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    linked.insert(2)
-
-    linked.removeByIndex(1)
+    expect(linked.remove(1)).toBe(true)
     expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([2, 0])
+    expect([...linked]).toEqual([0, 2])
 
-    linked.removeByIndex(0)
+    expect(linked.remove(1)).toBe(false)
+    expect(linked.length).toBe(2)
+    expect([...linked]).toEqual([0, 2])
+
+    expect(linked.remove(0)).toBe(true)
     expect(linked.length).toBe(1)
-    expect([...linked]).toEqual([0])
+    expect([...linked]).toEqual([2])
+
+    expect(linked.remove(2)).toBe(true)
+    expect(linked.length).toBe(0)
+    expect([...linked]).toEqual([])
+  })
+
+  it('removeAll: should remove all the nodes with the given value', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(1)
+    linked.push(2)
+    expect(linked.length).toBe(4)
+    expect(linked.removeAll(1)).toBe(2)
+    expect(linked.length).toBe(2)
+    expect([...linked]).toEqual([0, 2])
+
+    expect(linked.removeAll(1)).toBe(0)
+    expect(linked.length).toBe(2)
+    expect([...linked]).toEqual([0, 2])
+
+    expect(linked.removeAll(0)).toBe(1)
+    expect(linked.length).toBe(1)
+    expect([...linked]).toEqual([2])
+
+    expect(linked.removeAll(2)).toBe(1)
+    expect(linked.length).toBe(0)
+    expect([...linked]).toEqual([])
+  })
+
+  it('has: should return true if the value exists', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
+    expect(linked.length).toBe(3)
+    expect(linked.has(1)).toBe(true)
+    expect(linked.has(3)).toBe(false)
+  })
+
+  it('toArray: should return the value list', () => {
+    linked.unshift(0)
+    linked.unshift(1)
+    expect(linked.length).toBe(2)
+    expect([...linked]).toEqual([1, 0])
+
+    linked.unshift(2)
+    expect(linked.length).toBe(3)
+    expect([...linked]).toEqual([2, 1, 0])
   })
 })
 

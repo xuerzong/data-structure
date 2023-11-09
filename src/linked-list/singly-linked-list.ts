@@ -1,5 +1,3 @@
-import { isNull } from '@/_utils/is'
-
 export class SinglyLinkedNode<T> {
   value: T
   next: SinglyLinkedNode<T> | null
@@ -21,31 +19,35 @@ export class SinglyLinkedNode<T> {
 interface ISinglyLinkedList<T> {
   readonly head: SinglyLinkedNode<T> | null
 
+  readonly tail: SinglyLinkedNode<T> | null
+
   readonly length: number
 
-  insert(value: T): void
+  unshift(value: T): number
 
-  insertByIndex(index: number, value: T): void
+  shift(): T | null
 
-  insertFromHead(value: T): void
+  push(value: T): number
 
-  insertFromTail(value: T): void
+  pop(): T | null
 
-  findByIndex(index: number): SinglyLinkedNode<T> | null
+  remove(value: T): boolean
 
-  updateByIndex(index: number, value: T): void
+  removeAll(value: T): number
 
-  removeByIndex(index: number): void
+  has(value: T): boolean
 
   [Symbol.iterator](): IterableIterator<T>
 }
 
 export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
   private _head: SinglyLinkedNode<T> | null
+  private _tail: SinglyLinkedNode<T> | null
   private _length: number = 0
 
   constructor() {
     this._head = null
+    this._tail = null
   }
 
   get length() {
@@ -56,78 +58,154 @@ export default class SinglyLinkedList<T> implements ISinglyLinkedList<T> {
     return this._head
   }
 
-  insert(value: T) {
+  get tail() {
+    return this._tail
+  }
+
+  unshift(value: T) {
     this._length++
     const newNode = new SinglyLinkedNode(value)
 
-    if (isNull(this._head)) {
-      return (this._head = newNode)
+    if (this._head === null) {
+      this._head = newNode
+      this._tail = this._head
+    } else {
+      newNode.next = this._head
+      this._head = newNode
     }
 
-    newNode.next = this._head
-    this._head = newNode
+    return this._length
   }
 
-  insertByIndex(index: number, value: T) {
-    if (this._length === 0) {
-      return this.insertFromHead(value)
-    }
-
-    if (index > this._length) {
-      // TODO optimize
-      return this.insertFromTail(value)
-    }
-
-    this._length = this._length + 1
-    const preNode = this.findByIndex(index - 1) as SinglyLinkedNode<T>
-    const newNode = new SinglyLinkedNode(value)
-    newNode.next = preNode.next
-    preNode.next = newNode
-  }
-
-  insertFromHead(value: T) {
-    this.insert(value)
-  }
-
-  insertFromTail(value: T) {
-    this.insertByIndex(this._length, value)
-  }
-
-  findByIndex(index: number) {
-    let headCache = this._head
-
-    const over_length = index < 0 || index > this._length
-    if (over_length) {
+  shift(): T | null {
+    // length === 0
+    if (this._head === null) {
       return null
     }
 
-    let i = 0
-    while (i++ < index) {
-      headCache = headCache!.next
-    }
-    return headCache
+    this._length--
+    const oldHead = this._head
+    this._head = this._head.next
+    return oldHead!.value
   }
 
-  updateByIndex(index: number, value: T) {
-    const curNode = this.findByIndex(index)
-    if (isNull(curNode)) {
-      // pass
+  push(value: T) {
+    this._length++
+    const node = new SinglyLinkedNode(value)
+
+    if (this._head === null) {
+      this._head = node
     } else {
-      curNode.value = value
+      this._tail!.next = node
     }
+
+    this._tail = node
+
+    return this._length
   }
 
-  removeByIndex(index: number) {
-    if (index === 0 && this._head) {
-      this._length--
-      return (this._head = this._head.next)
+  pop() {
+    if (this._length === 0) {
+      return null
     }
 
-    const preNode = this.findByIndex(index - 1)
-    if (preNode) {
+    let current = this._head!
+
+    if (this._length === 1) {
       this._length--
-      preNode.next = preNode.next?.next || null
+      this._head = null
+      this._tail = this._head
+      return current.value
     }
+
+    this._length--
+    let preNode = current
+
+    while (current.next) {
+      preNode = current
+      current = current.next
+    }
+
+    this._tail = preNode
+    this._tail.next = null
+
+    return current.value
+  }
+
+  remove(value: T) {
+    return Boolean(this._remove(value))
+  }
+
+  removeAll(value: T) {
+    return this._remove(value, true)
+  }
+
+  private _remove(value: T, removeAll = false) {
+    if (this._length === 0) {
+      return 0
+    }
+
+    let current: SinglyLinkedNode<T> | null = this._head!
+    let rmCnt = 0
+
+    if (this._length === 1 && current.value === value) {
+      rmCnt++
+      this._length--
+      this._head = null
+      this._tail = this._head
+      return rmCnt
+    }
+
+    // if the head node is the target node
+    while (current && current.value === value) {
+      this._length--
+      this._head = current.next
+      current = this._head
+      rmCnt++
+      if (!removeAll) {
+        return rmCnt
+      }
+    }
+
+    // all node were removed
+    // `this._length === 0`
+    if (current === null) {
+      this._tail = null
+      return rmCnt
+    }
+
+    let preNode = current
+
+    while (current) {
+      if (current.value === value) {
+        rmCnt++
+        this._length--
+        preNode.next = current.next
+        if (!removeAll) {
+          break
+        }
+      } else {
+        preNode = current
+      }
+      current = current.next
+    }
+
+    if (preNode.next === null) {
+      this._tail = preNode
+    }
+
+    return rmCnt
+  }
+
+  has(value: T) {
+    let current = this._head
+    while (current) {
+      if (current.value === value) {
+        return true
+      }
+      current = current.next
+    }
+    return false
   }
 
   *[Symbol.iterator]() {
