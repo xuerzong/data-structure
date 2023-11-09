@@ -16,6 +16,10 @@
     "type": "git",
     "url": "https://github.com/xuerzong/data-structure"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "bugs": {
     "url": "https://github.com/xuerzong/data-structure/issues"
   },
