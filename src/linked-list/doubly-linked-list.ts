@@ -1,5 +1,3 @@
-import { isNull, isNotNull } from '@/_utils/is'
-
 export class DoublyLinkedNode<T> {
   value: T
   prev: DoublyLinkedNode<T> | null
@@ -25,123 +23,136 @@ interface IDoublyLinkedList<T> {
 
   readonly head: DoublyLinkedNode<T> | null
 
-  insert(value: T): void
+  readonly tail: DoublyLinkedNode<T> | null
 
-  insertByIndex(index: number, value: T): void
+  unshift(value: T): number
 
-  insertFromHead(value: T): void
+  shift(): T | null
 
-  insertFromTail(value: T): void
+  push(value: T): number
 
-  findByIndex: (index: number) => DoublyLinkedNode<T> | null
+  pop(): T | null
 
-  updateByIndex(index: number, value: T): void
+  has(value: T): boolean
 
-  removeByIndex(index: number): void
+  get(value: T): DoublyLinkedNode<T> | null
 
   [Symbol.iterator](): IterableIterator<T>
 }
 
 export default class DoublyLinkedList<T = any> implements IDoublyLinkedList<T> {
   private _head: DoublyLinkedNode<T> | null
+  private _tail: DoublyLinkedNode<T> | null
   private _length: number = 0
 
   constructor() {
     this._head = null
+    this._tail = null
   }
 
   get head() {
     return this._head
   }
 
+  get tail() {
+    return this._tail
+  }
+
   get length() {
     return this._length
   }
 
-  insert(value: T) {
-    this._length++
-    const newNode = new DoublyLinkedNode(value)
+  unshift(value: T): number {
+    const currentLen = this._length
 
-    newNode.next = this._head
-    if (isNotNull<DoublyLinkedNode<T>>(this._head)) {
-      this._head.prev = newNode
+    this._length++
+
+    const node = new DoublyLinkedNode(value)
+
+    node.next = this._head
+
+    if (this._head !== null) {
+      this._head.prev = node
     }
 
-    this._head = newNode
+    this._head = node
+
+    if (currentLen === 0) {
+      this._tail = this._head
+    }
+
+    return this._length
   }
 
-  insertByIndex(index: number, value: T) {
+  shift() {
     if (this._length === 0) {
-      return this.insertFromHead(value)
-    }
-
-    if (this._length > this._length) {
-      // TODO optimize
-      return this.insertFromTail(value)
-    }
-
-    this._length++
-
-    const preNode = this.findByIndex(index - 1) as DoublyLinkedNode<T>
-    const newNode = new DoublyLinkedNode(value)
-
-    newNode.next = preNode.next
-
-    preNode.next = newNode
-    newNode.prev = preNode
-  }
-
-  insertFromHead(value: T): void {
-    this.insert(value)
-  }
-
-  insertFromTail(value: T): void {
-    this.insertByIndex(this._length, value)
-  }
-
-  findByIndex(index: number) {
-    let _headCache = this._head
-
-    const oversize = index < 0 || index > this._length
-    if (oversize) {
       return null
     }
 
-    let i = 0
-    while (i++ < index) {
-      _headCache = _headCache!.next
-    }
-    return _headCache
-  }
-
-  updateByIndex(index: number, value: T) {
-    const curNode = this.findByIndex(index)
-    if (isNull(curNode)) {
-      // pass
-    } else {
-      curNode.value = value
-    }
-  }
-
-  removeByIndex(index: number) {
-    const curNode = this.findByIndex(index)
-
-    if (isNull(curNode)) {
-      return
-    }
-
+    const currentLen = this._length
     this._length--
+    const oldHead = this._head
+    this._head = this._head!.next
 
-    if (isNull(curNode.prev)) {
-      // current node is _head node
-      this._head = curNode.next
-    } else {
-      curNode.prev.next = curNode.next
+    if (currentLen === 1) {
+      this._tail = this._head // null
     }
 
-    if (isNotNull<DoublyLinkedNode<T>>(curNode.next)) {
-      curNode.next.prev = curNode.prev
+    return oldHead!.value
+  }
+
+  push(value: T) {
+    if (this._length === 0) {
+      return this.unshift(value)
     }
+
+    this._length++
+
+    const node = new DoublyLinkedNode(value)
+    node.prev = this._tail
+    this._tail!.next = node
+    this._tail = node
+
+    return this._length
+  }
+
+  pop(): T | null {
+    if (this._length === 0) {
+      return null
+    }
+
+    const currentLen = this._length
+    this._length--
+    const oldTail = this._tail
+    this._tail = this._tail!.prev
+
+    if (currentLen === 1) {
+      this._head = this._tail // null
+    }
+
+    return oldTail!.value
+  }
+
+  has(value: T) {
+    let current = this._head
+    while (current) {
+      if (current.value === value) {
+        return true
+      }
+      current = current.next
+    }
+    return false
+  }
+
+  get(value: T) {
+    let current = this._head
+    while (current) {
+      if (current.value === value) {
+        return current
+      }
+      current = current.next
+    }
+    return null
   }
 
   *[Symbol.iterator]() {

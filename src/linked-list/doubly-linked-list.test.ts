@@ -6,88 +6,87 @@ describe('LinkedList.DoublyLinkedList', () => {
   beforeEach(() => {
     linked = new DoublyLinkedList()
   })
-  it('insert: should be the new node', () => {
-    const tmpNode1 = new DoublyLinkedNode(0)
-    const tmpNode2 = new DoublyLinkedNode(1)
-    linked.insert(0)
+  it('unshift: should insert new node from head', () => {
+    linked.unshift(0)
     expect(linked.length).toBe(1)
-    expect(linked.head).toEqual(tmpNode1)
+    expect(linked.head?.value).toBe(0)
+    expect(linked.tail?.value).toBe(0)
 
-    linked.insert(1)
-    tmpNode1.prev = tmpNode2
-    tmpNode2.next = tmpNode1
+    linked.unshift(1)
     expect(linked.length).toBe(2)
-    expect(linked.head?.next).toEqual(tmpNode1)
-  })
+    expect(linked.head?.value).toBe(1)
+    expect(linked.tail?.value).toBe(0)
 
-  it('toArray: should return the key list', () => {
-    linked.insert(0)
-    linked.insert(1)
     expect([...linked]).toEqual([1, 0])
-
-    linked.insert(2)
-    expect([...linked]).toEqual([2, 1, 0])
   })
 
-  it('insertByIndex: should insert new node at index', () => {
-    linked.insertByIndex(0, 0)
-    linked.insertByIndex(1, 1)
-    expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([0, 1])
+  it('shift: should return the head node', () => {
+    linked.unshift(0)
+    linked.unshift(1)
+    linked.unshift(2)
 
-    linked.insertByIndex(1, 2)
-    expect(linked.length).toBe(3)
-    expect([...linked]).toEqual([0, 2, 1])
+    expect(linked.shift()).toBe(2)
+    expect(linked.length).toBe(2)
+
+    expect(linked.head?.value).toBe(1)
+    expect(linked.tail?.value).toBe(0)
+
+    linked.shift()
+    linked.shift()
+    expect(linked.length).toBe(0)
+    expect(linked.head).toBe(null)
+    expect(linked.tail).toBe(null)
   })
 
-  it('insertFromHead: should insert new node at first index', () => {
-    linked.insertFromHead(0)
-    linked.insertFromHead(1)
+  it('push: should insert new node from tail', () => {
+    linked.push(0)
+    linked.push(1)
     expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([1, 0])
+    expect(linked.head?.value).toBe(0)
+    expect(linked.tail?.value).toBe(1)
 
-    linked.insertFromHead(2)
+    linked.push(2)
     expect(linked.length).toBe(3)
-    expect([...linked]).toEqual([2, 1, 0])
-  })
+    expect(linked.head?.value).toBe(0)
+    expect(linked.tail?.value).toBe(2)
 
-  it('insertFromTail: should insert new node at last index', () => {
-    linked.insertFromTail(0)
-    linked.insertFromTail(1)
-    expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([0, 1])
-
-    linked.insertFromTail(2)
-    expect(linked.length).toBe(3)
     expect([...linked]).toEqual([0, 1, 2])
   })
 
-  it('findByIndex: should return the key at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    expect(linked.findByIndex(0)?.value).toEqual(1)
-    expect(linked.findByIndex(1)?.prev?.value).toEqual(1)
+  it('pop: should return the tail node', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
 
-    expect(linked.findByIndex(-1)).toBe(null)
-    expect(linked.findByIndex(linked.length + 1)).toBe(null)
-  })
-
-  it('updateByIndex: should update the key at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    linked.updateByIndex(0, 4)
-    linked.updateByIndex(1, 3)
-    expect([...linked]).toEqual([4, 3])
-  })
-
-  it('removeByIndex: should remove the key at index', () => {
-    linked.insert(0)
-    linked.insert(1)
-    linked.insert(2)
-
-    linked.removeByIndex(1)
+    expect(linked.pop()).toBe(2)
     expect(linked.length).toBe(2)
-    expect([...linked]).toEqual([2, 0])
+
+    expect(linked.head?.value).toBe(0)
+    expect(linked.tail?.value).toBe(1)
+
+    linked.pop()
+    linked.pop()
+    expect(linked.length).toBe(0)
+    expect(linked.head).toBe(null)
+    expect(linked.tail).toBe(null)
+  })
+
+  it('has: should return true if the given value exists in the list', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
+
+    expect(linked.has(1)).toBe(true)
+    expect(linked.has(3)).toBe(false)
+  })
+
+  it('get: should return the node with the given value', () => {
+    linked.push(0)
+    linked.push(1)
+    linked.push(2)
+
+    expect(linked.get(1)?.value).toBe(1)
+    expect(linked.get(3)).toBe(null)
   })
 })
 
